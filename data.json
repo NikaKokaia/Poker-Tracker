@@ -1,0 +1,47 @@
+{
+  "players": ["Kaplanishvili","Kokaia","Tabatadze","Tsulaia","Abelishvili","Kvernadze","Davitashvili","Getiashvili"],
+  "sessions": [
+    {
+      "date": "2026-06-03",
+      "label": "",
+      "results": [
+        { "name": "Abelishvili", "pl": 160 },
+        { "name": "Tabatadze", "pl": 0 },
+        { "name": "Kokaia", "pl": -60 },
+        { "name": "Kaplanishvili", "pl": -60 },
+        { "name": "Getiashvili", "pl": -40 }
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "label": "",
+      "results": [
+        { "name": "Davitashvili", "pl": 260 },
+        { "name": "Kokaia", "pl": -100 },
+        { "name": "Kaplanishvili", "pl": -60 },
+        { "name": "Abelishvili", "pl": -60 },
+        { "name": "Kvernadze", "pl": -40 }
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "label": "Game 1",
+      "results": [
+        { "name": "Kaplanishvili", "pl": 150 },
+        { "name": "Kokaia", "pl": -50 },
+        { "name": "Tabatadze", "pl": -50 },
+        { "name": "Tsulaia", "pl": -50 }
+      ]
+    },
+    {
+      "date": "2026-06-13",
+      "label": "Game 2",
+      "results": [
+        { "name": "Kaplanishvili", "pl": 150 },
+        { "name": "Kokaia", "pl": -50 },
+        { "name": "Tabatadze", "pl": -50 },
+        { "name": "Tsulaia", "pl": -50 }
+      ]
+    }
+  ]
+}

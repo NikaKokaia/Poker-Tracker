@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Poker Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --bg2: #1a1a1a;
+      --bg3: #242424;
+      --border: #2e2e2e;
+      --text: #f0f0f0;
+      --text2: #888;
+      --green: #1db87a;
+      --red: #e24b4a;
+      --gold: #f5a623;
+      --purple: #7c6af7;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .top-bar h1 {
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-bar h1 span { font-size: 22px; }
+    .subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+    .tab-bar {
+      display: flex;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text2);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: color 0.15s;
+    }
+    .tab.active {
+      color: var(--text);
+      border-bottom-color: var(--purple);
+      font-weight: 500;
+    }
+
+    .page { display: none; padding: 20px 16px; max-width: 700px; margin: 0 auto; }
+    .page.active { display: block; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .metric {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .metric-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+    .metric-value { font-size: 22px; font-weight: 600; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 4px 16px;
+      margin-bottom: 20px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .player-row:last-child { border-bottom: none; }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .player-info { flex: 1; min-width: 0; }
+    .player-name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+    .pl { font-size: 16px; font-weight: 600; text-align: right; }
+    .pl.pos { color: var(--green); }
+    .pl.neg { color: var(--red); }
+    .pl.zero { color: var(--text2); }
+
+    .rank-badge {
+      width: 28px;
+      text-align: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .bar-bg { width: 50px; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+
+    /* Stats table */
+    .stats-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .stats-table th {
+      text-align: right;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text2);
+      padding: 8px 8px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-table th:first-child { text-align: left; }
+    .stats-table td {
+      padding: 11px 8px;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .stats-table td:first-child { text-align: left; }
+    .stats-table tr:last-child td { border-bottom: none; }
+    .stats-table .name-cell { display: flex; align-items: center; gap: 8px; }
+    .sm-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 600; flex-shrink: 0;
+    }
+
+    /* Session history */
+    .session-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .session-date { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .session-meta { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    .chip.win { background: #0f3d2a; color: #2de898; }
+    .chip.loss { background: #3d1010; color: #f08080; }
+    .chip.zero { background: var(--bg3); color: var(--text2); }
+
+    /* Player detail */
+    .player-detail { display: none; }
+    .player-detail.active { display: block; }
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--purple);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 16px;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .game-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .game-row:last-child { border-bottom: none; }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text2);
+      font-size: 14px;
+    }
+
+    @media (max-width: 420px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .bar-bg { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <h1><span>🃏</span> Poker Tracker</h1>
+    <div class="subtitle" id="top-subtitle">Loading...</div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('leaderboard')">Leaderboard</button>
+  <button class="tab" onclick="switchTab('stats')">Stats</button>
+  <button class="tab" onclick="switchTab('history')">History</button>
+</div>
+
+<div id="leaderboard" class="page active"><div class="loading">Loading...</div></div>
+<div id="stats" class="page"><div class="loading">Loading...</div></div>
+<div id="history" class="page"><div class="loading">Loading...</div></div>
+
+<script>
+const COLORS = ['#7c6af7','#1db87a','#e06b3a','#d4537e','#3a8add','#8ab832','#c87a17','#e24b4a','#888780'];
+
+function avatarColor(name) {
+  let h = 0;
+  for (let c of name) h = (h * 31 + c.charCodeAt(0)) % COLORS.length;
+  return COLORS[h];
+}
+function initials(name) {
+  return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+}
+function fmtDate(d) {
+  return new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+function fmtPL(v) {
+  return (v >= 0 ? '+' : '') + '€' + v;
+}
+function plClass(v) {
+  return v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero';
+}
+
+let DATA = null;
+
+function getStats(name) {
+  let totalPL = 0, wins = 0, games = 0, biggestWin = 0, biggestLoss = 0;
+  DATA.sessions.forEach(s => {
+    const r = s.results.find(r => r.name === name);
+    if (r) {
+      totalPL += r.pl; games++;
+      if (r.pl > 0) { wins++; if (r.pl > biggestWin) biggestWin = r.pl; }
+      if (r.pl < 0 && r.pl < biggestLoss) biggestLoss = r.pl;
+    }
+  });
+  return { totalPL, wins, losses: games - wins, games, winRate: games ? Math.round((wins / games) * 100) : 0, biggestWin, biggestLoss };
+}
+
+let activeTab = 'leaderboard';
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab')[['leaderboard','stats','history'].indexOf(tab)].classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  if (DATA) render(tab);
+}
+
+function render(tab) {
+  if (tab === 'leaderboard') renderLeaderboard();
+  else if (tab === 'stats') renderStats();
+  else renderHistory();
+}
+
+function renderLeaderboard() {
+  const el = document.getElementById('leaderboard');
+  const ranked = DATA.players.map(p => ({ name: p, ...getStats(p) })).sort((a, b) => b.totalPL - a.totalPL);
+  const totalWon = DATA.sessions.reduce((s, sess) => s + sess.results.filter(r => r.pl > 0).reduce((s2, r) => s2 + r.pl, 0), 0);
+  const maxAbs = Math.max(...ranked.map(p => Math.abs(p.totalPL)), 1);
+  const rankIcons = ['🥇', '🥈', '🥉'];
+
+  el.innerHTML = `
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Games</div><div class="metric-value">${DATA.sessions.length}</div></div>
+      <div class="metric"><div class="metric-label">Total won</div><div class="metric-value">€${totalWon}</div></div>
+      <div class="metric"><div class="metric-label">Players</div><div class="metric-value">${DATA.players.length}</div></div>
+    </div>
+    <div class="section-title">All-time standings</div>
+    <div class="card">
+      ${ranked.map((p, i) => `
+        <div class="player-row">
+          <div class="rank-badge">${i < 3 ? rankIcons[i] : `<span style="font-size:13px;color:var(--text2)">${i+1}</span>`}</div>
+          <div class="avatar" style="background:${avatarColor(p.name)}22;color:${avatarColor(p.name)}">${initials(p.name)}</div>
+          <div class="player-info">
+            <div class="player-name">${p.name}</div>
+            <div class="player-meta">${p.games} games · ${p.winRate}% win rate</div>
+          </div>
+          <div>
+            <div class="bar-wrap">
+              <div class="pl ${plClass(p.totalPL)}">${fmtPL(p.totalPL)}</div>
+              <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(Math.abs(p.totalPL)/maxAbs*100)}%;background:${p.totalPL>0?'var(--green)':p.totalPL<0?'var(--red)':'var(--text2)'}"></div></div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderStats() {
+  const el = document.getElementById('stats');
+  const ranked = DATA.players.map(p => ({ name: p, ...getStats(p) })).sort((a, b) => b.totalPL - a.totalPL);
+
+  el.innerHTML = `
+    <div class="section-title">Player breakdown</div>
+    <div class="card" style="padding: 4px 8px; overflow-x: auto;">
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>G</th>
+            <th>W</th>
+            <th>W%</th>
+            <th>Best</th>
+            <th>Worst</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${ranked.map(p => `
+            <tr>
+              <td>
+                <div class="name-cell">
+                  <div class="sm-avatar" style="background:${avatarColor(p.name)}22;color:${avatarColor(p.name)}">${initials(p.name)}</div>
+                  ${p.name}
+                </div>
+              </td>
+              <td>${p.games}</td>
+              <td>${p.wins}</td>
+              <td>${p.winRate}%</td>
+              <td class="${p.biggestWin > 0 ? 'pl pos' : 'pl zero'}">${p.biggestWin > 0 ? '+€' + p.biggestWin : '—'}</td>
+              <td class="${p.biggestLoss < 0 ? 'pl neg' : 'pl zero'}">${p.biggestLoss < 0 ? '€' + p.biggestLoss : '—'}</td>
+              <td class="pl ${plClass(p.totalPL)}">${fmtPL(p.totalPL)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title">Head-to-head: most played together</div>
+    <div class="card">
+      ${getH2H().map(h => `
+        <div class="game-row">
+          <span style="color:var(--text)">${h.p1} <span style="color:var(--text2)">vs</span> ${h.p2}</span>
+          <span style="color:var(--text2);font-size:13px;">${h.count} game${h.count!==1?'s':''} together</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function getH2H() {
+  const counts = {};
+  DATA.sessions.forEach(s => {
+    const names = s.results.map(r => r.name);
+    for (let i = 0; i < names.length; i++) {
+      for (let j = i + 1; j < names.length; j++) {
+        const key = [names[i], names[j]].sort().join('|');
+        counts[key] = (counts[key] || 0) + 1;
+      }
+    }
+  });
+  return Object.entries(counts)
+    .map(([k, count]) => { const [p1, p2] = k.split('|'); return { p1, p2, count }; })
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 6);
+}
+
+function renderHistory() {
+  const el = document.getElementById('history');
+  const sorted = [...DATA.sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
+  el.innerHTML = `
+    <div class="section-title">${DATA.sessions.length} games total</div>
+    ${sorted.map(s => {
+      const res = [...s.results].sort((a, b) => b.pl - a.pl);
+      return `
+        <div class="session-card">
+          <div class="session-date">${fmtDate(s.date)}${s.label ? ' · ' + s.label : ''}</div>
+          <div class="session-meta">${s.results.length} players</div>
+          <div class="chips">
+            ${res.map(r => `<span class="chip ${r.pl > 0 ? 'win' : r.pl < 0 ? 'loss' : 'zero'}">${r.name} ${fmtPL(r.pl)}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+async function loadData() {
+  try {
+    const res = await fetch('data.json?v=' + Date.now());
+    DATA = await res.json();
+    document.getElementById('top-subtitle').textContent = `${DATA.players.length} players · ${DATA.sessions.length} games`;
+    render(activeTab);
+  } catch(e) {
+    document.getElementById('top-subtitle').textContent = 'Error loading data';
+    document.getElementById('leaderboard').innerHTML = '<div class="loading">Could not load data.json</div>';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
