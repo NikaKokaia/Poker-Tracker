@@ -1,254 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Poker Tracker</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poker Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #0f0f0f;
-      --bg2: #1a1a1a;
-      --bg3: #242424;
-      --border: #2e2e2e;
-      --text: #f0f0f0;
-      --text2: #888;
-      --green: #1db87a;
-      --red: #e24b4a;
-      --gold: #f5a623;
-      --purple: #7c6af7;
-    }
+  :root {
+    --felt: #0f3d2e;
+    --felt-dark: #0a2b20;
+    --felt-light: #155241;
+    --cream: #f3ead4;
+    --cream-dim: #e6dabc;
+    --ink: #20180f;
+    --ink-soft: #6b5d49;
+    --gold: #c8983f;
+    --gold-bright: #e0b15c;
+    --burgundy: #8c2f39;
+    --burgundy-bright: #b8434f;
+    --line: rgba(243, 234, 212, 0.12);
+    --line-soft: rgba(32, 24, 15, 0.1);
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      min-height: 100vh;
-    }
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
 
-    .top-bar {
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+  html { -webkit-text-size-adjust: 100%; }
 
-    .top-bar h1 {
-      font-size: 18px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  body {
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(200,152,63,0.10), transparent 60%),
+      var(--felt);
+    background-attachment: fixed;
+    color: var(--cream);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    line-height: 1.4;
+  }
 
-    .top-bar h1 span { font-size: 22px; }
-    .subtitle { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-    .tab-bar {
-      display: flex;
-      background: var(--bg2);
-      border-bottom: 1px solid var(--border);
-      padding: 0 16px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .tab-bar::-webkit-scrollbar { display: none; }
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(180deg, var(--felt-dark) 0%, rgba(10,43,32,0.97) 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 18px 20px 16px;
+  }
 
-    .tab {
-      padding: 12px 16px;
-      font-size: 14px;
-      color: var(--text2);
-      border: none;
-      background: none;
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-      font-family: inherit;
-      transition: color 0.15s;
-    }
-    .tab.active {
-      color: var(--text);
-      border-bottom-color: var(--purple);
-      font-weight: 500;
-    }
+  .brand-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
 
-    .page { display: none; padding: 20px 16px; max-width: 700px; margin: 0 auto; }
-    .page.active { display: block; }
+  .suit-mark {
+    font-size: 20px;
+    color: var(--gold-bright);
+    line-height: 1;
+    transform: translateY(2px);
+  }
 
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-      margin-bottom: 24px;
-    }
+  .top-bar h1 {
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--cream);
+  }
 
-    .metric {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-    }
-    .metric-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-    .metric-value { font-size: 22px; font-weight: 600; }
+  .subtitle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--cream-dim);
+    opacity: 0.65;
+    margin-top: 4px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
 
-    .section-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text2);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
-    }
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    background: var(--felt-dark);
+    border-bottom: 1px solid var(--line);
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 73px;
+    z-index: 19;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
 
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 4px 16px;
-      margin-bottom: 20px;
-    }
+  .tab {
+    position: relative;
+    padding: 13px 14px 11px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(243,234,212,0.5);
+    border: none;
+    background: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .tab.active { color: var(--gold-bright); }
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    left: 14px; right: 14px; bottom: 0;
+    height: 2px;
+    background: var(--gold-bright);
+    border-radius: 2px 2px 0 0;
+  }
+  .tab:hover:not(.active) { color: rgba(243,234,212,0.8); }
 
-    .player-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .player-row:last-child { border-bottom: none; }
+  .page { display: none; padding: 22px 16px 50px; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+  .page.active { display: block; }
 
-    .avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 26px;
+  }
 
-    .player-info { flex: 1; min-width: 0; }
-    .player-name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .player-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .metric {
+    background: linear-gradient(160deg, rgba(243,234,212,0.07), rgba(243,234,212,0.02));
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--cream-dim);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 7px;
+  }
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--cream);
+  }
 
-    .pl { font-size: 16px; font-weight: 600; text-align: right; }
-    .pl.pos { color: var(--green); }
-    .pl.neg { color: var(--red); }
-    .pl.zero { color: var(--text2); }
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold-bright);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 11px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line), transparent);
+  }
 
-    .rank-badge {
-      width: 28px;
-      text-align: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
+  .card {
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 16px;
+    padding: 4px 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
 
-    .bar-wrap { display: flex; align-items: center; gap: 8px; }
-    .bar-bg { width: 50px; height: 5px; background: var(--bg3); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
-    .bar-fill { height: 100%; border-radius: 3px; }
+  .player-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .player-row:last-child { border-bottom: none; }
+  .player-row.clickable { cursor: pointer; transition: background 0.12s; margin: 0 -18px; padding: 14px 18px; }
+  .player-row.clickable:hover { background: rgba(32,24,15,0.04); }
 
-    /* Stats table */
-    .stats-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .stats-table th {
-      text-align: right;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text2);
-      padding: 8px 8px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    .stats-table th:first-child { text-align: left; }
-    .stats-table td {
-      padding: 11px 8px;
-      text-align: right;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-    .stats-table td:first-child { text-align: left; }
-    .stats-table tr:last-child td { border-bottom: none; }
-    .stats-table .name-cell { display: flex; align-items: center; gap: 8px; }
-    .sm-avatar {
-      width: 26px; height: 26px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px; font-weight: 600; flex-shrink: 0;
-    }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    position: relative;
+    border: 1.5px solid currentColor;
+  }
 
-    /* Session history */
-    .session-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-    }
-    .session-date { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-    .session-meta { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip {
-      font-size: 12px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 500;
-    }
-    .chip.win { background: #0f3d2a; color: #2de898; }
-    .chip.loss { background: #3d1010; color: #f08080; }
-    .chip.zero { background: var(--bg3); color: var(--text2); }
+  .player-info { flex: 1; min-width: 0; }
+  .player-name {
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .player-meta {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    letter-spacing: 0.01em;
+  }
 
-    /* Player detail */
-    .player-detail { display: none; }
-    .player-detail.active { display: block; }
-    .back-btn {
-      background: none;
-      border: none;
-      color: var(--purple);
-      font-size: 14px;
-      cursor: pointer;
-      padding: 0;
-      margin-bottom: 16px;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+  .pl {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 500;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .pl.pos { color: #1e7a52; }
+  .pl.neg { color: var(--burgundy); }
+  .pl.zero { color: var(--ink-soft); }
 
-    .game-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 11px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-    }
-    .game-row:last-child { border-bottom: none; }
+  .rank-badge {
+    width: 26px;
+    text-align: center;
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .rank-badge.medal { font-size: 19px; }
 
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text2);
-      font-size: 14px;
-    }
+  .bar-wrap { display: flex; align-items: center; gap: 9px; }
+  .bar-bg { width: 46px; height: 4px; background: rgba(32,24,15,0.08); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+  .bar-fill { height: 100%; border-radius: 3px; }
 
-    @media (max-width: 420px) {
-      .metrics { grid-template-columns: repeat(2, 1fr); }
-      .bar-bg { display: none; }
-    }
-  </style>
+  .record-card { background: var(--cream); }
+  .record-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line-soft);
+    gap: 12px;
+  }
+  .record-row:last-child { border-bottom: none; }
+  .record-label { display: flex; align-items: center; gap: 9px; font-weight: 500; font-size: 14px; color: var(--ink); }
+  .record-icon { font-size: 17px; }
+  .record-value { text-align: right; font-size: 12.5px; color: var(--ink-soft); line-height: 1.45; }
+  .record-value b { color: var(--ink); font-weight: 600; }
+  .record-date { font-family: var(--font-mono); font-size: 10.5px; opacity: 0.7; }
+
+  .stats-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .stats-table th {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 7px 12px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .stats-table th:first-child { text-align: left; }
+  .stats-table td {
+    padding: 12px 7px;
+    text-align: right;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: middle;
+    font-family: var(--font-mono);
+    color: var(--ink);
+    font-size: 13px;
+  }
+  .stats-table td:first-child { text-align: left; font-family: var(--font-body); }
+  .stats-table tr:last-child td { border-bottom: none; }
+  .stats-table tr.clickable { cursor: pointer; transition: background 0.12s; }
+  .stats-table tr.clickable:hover { background: rgba(32,24,15,0.04); }
+  .stats-table .name-cell { display: flex; align-items: center; gap: 9px; font-weight: 600; }
+  .sm-avatar {
+    width: 27px; height: 27px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 10px; font-weight: 600; flex-shrink: 0;
+    border: 1.5px solid currentColor;
+  }
+
+  .h2h-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13.5px;
+  }
+  .h2h-row:last-child { border-bottom: none; }
+  .h2h-names { color: var(--ink); font-weight: 500; }
+  .h2h-vs { color: var(--ink-soft); font-style: italic; font-family: var(--font-display); margin: 0 3px; }
+  .h2h-count { font-family: var(--font-mono); color: var(--ink-soft); font-size: 12px; }
+
+  .session-card {
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 15px 18px;
+    margin-bottom: 11px;
+    box-shadow: 0 6px 18px -8px rgba(0,0,0,0.3);
+  }
+  .session-date {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 3px;
+  }
+  .session-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 11px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .chip.win { background: #dcf0e4; color: #1e7a52; }
+  .chip.loss { background: #f5dfe1; color: var(--burgundy); }
+  .chip.zero { background: rgba(32,24,15,0.07); color: var(--ink-soft); }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--gold-bright);
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .back-btn:hover { color: var(--cream); }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .profile-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 20px; font-weight: 600;
+    border: 2px solid currentColor;
+    flex-shrink: 0;
+  }
+  .profile-name {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--cream);
+  }
+  .profile-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--cream-dim);
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .game-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 13.5px;
+  }
+  .game-row:last-child { border-bottom: none; }
+  .game-row .date-label { color: var(--ink-soft); font-family: var(--font-mono); font-size: 12px; }
+
+  .chart-card { padding: 18px 18px 14px; }
+
+  .loading {
+    text-align: center;
+    padding: 70px 20px;
+    color: var(--cream-dim);
+    opacity: 0.6;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+  }
+
+  .empty-note {
+    text-align: center;
+    padding: 30px 16px;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+  }
+
+  @media (max-width: 420px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .bar-bg { display: none; }
+    .top-bar h1 { font-size: 20px; }
+  }
+</style>
 </head>
 <body>
 
 <div class="top-bar">
-  <div>
-    <h1><span>🃏</span> Poker Tracker</h1>
-    <div class="subtitle" id="top-subtitle">Loading...</div>
+  <div class="brand-row">
+    <span class="suit-mark">&#9824;</span>
+    <h1>Poker Tracker</h1>
   </div>
+  <div class="subtitle" id="top-subtitle">Loading&hellip;</div>
 </div>
 
 <div class="tab-bar">
@@ -257,13 +452,13 @@
   <button class="tab" onclick="switchTab('history')">History</button>
 </div>
 
-<div id="leaderboard" class="page active"><div class="loading">Loading...</div></div>
-<div id="stats" class="page"><div class="loading">Loading...</div></div>
-<div id="history" class="page"><div class="loading">Loading...</div></div>
+<div id="leaderboard" class="page active"><div class="loading">Shuffling the deck&hellip;</div></div>
+<div id="stats" class="page"><div class="loading">Shuffling the deck&hellip;</div></div>
+<div id="history" class="page"><div class="loading">Shuffling the deck&hellip;</div></div>
 <div id="profile" class="page"></div>
 
 <script>
-const COLORS = ['#7c6af7','#1db87a','#e06b3a','#d4537e','#3a8add','#8ab832','#c87a17','#e24b4a','#888780'];
+const COLORS = ['#e0b15c','#7fb89e','#c97b6e','#d4a5b8','#7fa8c9','#a8b87f','#c8983f','#b8434f','#9b9384'];
 
 function avatarColor(name) {
   let h = 0;
@@ -277,7 +472,7 @@ function fmtDate(d) {
   return new Date(d + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 function fmtPL(v) {
-  return (v >= 0 ? '+' : '') + '€' + v;
+  return (v >= 0 ? '+' : '') + '\u20AC' + v;
 }
 function plClass(v) {
   return v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero';
@@ -298,7 +493,6 @@ function getStats(name) {
   return { totalPL, wins, losses: games - wins, games, winRate: games ? Math.round((wins / games) * 100) : 0, biggestWin, biggestLoss };
 }
 
-// Sessions for a player, sorted chronologically (oldest first)
 function getPlayerSessions(name) {
   return DATA.sessions
     .filter(s => s.results.some(r => r.name === name))
@@ -306,9 +500,8 @@ function getPlayerSessions(name) {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
-// Current streak: positive number = win streak, negative = loss streak, 0 = last game was a push
 function getStreak(name) {
-  const sess = getPlayerSessions(name).slice().reverse(); // most recent first
+  const sess = getPlayerSessions(name).slice().reverse();
   if (!sess.length) return 0;
   const sign = sess[0].pl > 0 ? 1 : sess[0].pl < 0 ? -1 : 0;
   if (sign === 0) return 0;
@@ -324,10 +517,9 @@ function getStreak(name) {
 function streakLabel(streak) {
   if (streak === 0) return 'No streak';
   const n = Math.abs(streak);
-  return streak > 0 ? `🔥 ${n} win streak` : `🥶 ${n} loss streak`;
+  return streak > 0 ? `On a ${n}-win streak` : `On a ${n}-loss skid`;
 }
 
-// Biggest single pot won, and closest game (smallest spread between top and bottom)
 function getBadges() {
   let biggestPot = null, closestGame = null;
   DATA.sessions.forEach(s => {
@@ -351,6 +543,7 @@ function switchTab(tab) {
   document.querySelectorAll('.tab')[['leaderboard','stats','history'].indexOf(tab)].classList.add('active');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(tab).classList.add('active');
+  window.scrollTo(0, 0);
   if (DATA) render(tab);
 }
 
@@ -358,6 +551,7 @@ function openProfile(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('profile').classList.add('active');
+  window.scrollTo(0, 0);
   renderProfile(name);
 }
 
@@ -367,31 +561,38 @@ function render(tab) {
   else renderHistory();
 }
 
+function avatarHtml(name, size) {
+  const cls = size === 'sm' ? 'sm-avatar' : 'avatar';
+  return `<div class="${cls}" style="background:${avatarColor(name)}22;color:${avatarColor(name)}">${initials(name)}</div>`;
+}
+
 function renderLeaderboard() {
   const el = document.getElementById('leaderboard');
+  if (!DATA.players.length) { el.innerHTML = '<div class="card"><div class="empty-note">No games logged yet.</div></div>'; return; }
+
   const ranked = DATA.players.map(p => ({ name: p, ...getStats(p) })).sort((a, b) => b.totalPL - a.totalPL);
   const totalWon = DATA.sessions.reduce((s, sess) => s + sess.results.filter(r => r.pl > 0).reduce((s2, r) => s2 + r.pl, 0), 0);
   const maxAbs = Math.max(...ranked.map(p => Math.abs(p.totalPL)), 1);
-  const rankIcons = ['🥇', '🥈', '🥉'];
+  const rankIcons = ['\u{1F947}', '\u{1F948}', '\u{1F949}'];
   const badges = getBadges();
 
   el.innerHTML = `
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Games</div><div class="metric-value">${DATA.sessions.length}</div></div>
-      <div class="metric"><div class="metric-label">Total won</div><div class="metric-value">€${totalWon}</div></div>
+      <div class="metric"><div class="metric-label">Games played</div><div class="metric-value">${DATA.sessions.length}</div></div>
+      <div class="metric"><div class="metric-label">Total in pots</div><div class="metric-value">\u20AC${totalWon}</div></div>
       <div class="metric"><div class="metric-label">Players</div><div class="metric-value">${DATA.players.length}</div></div>
     </div>
 
     ${badges.biggestPot ? `
-    <div class="section-title">Records</div>
-    <div class="card" style="padding: 12px 16px;">
-      <div class="game-row" style="border-bottom:1px solid var(--border);">
-        <span>🏆 Biggest single pot</span>
-        <span style="color:var(--text2);font-size:13px;text-align:right;">${badges.biggestPot.name} +€${badges.biggestPot.amount}<br><span style="font-size:11px;">${fmtDate(badges.biggestPot.date)}${badges.biggestPot.label ? ' · ' + badges.biggestPot.label : ''}</span></span>
+    <div class="section-title">Table records</div>
+    <div class="card record-card">
+      <div class="record-row">
+        <div class="record-label"><span class="record-icon">\u{1F3C6}</span> Biggest pot won</div>
+        <div class="record-value"><b>${badges.biggestPot.name}</b> +\u20AC${badges.biggestPot.amount}<br><span class="record-date">${fmtDate(badges.biggestPot.date)}${badges.biggestPot.label ? ' &middot; ' + badges.biggestPot.label : ''}</span></div>
       </div>
-      <div class="game-row">
-        <span>🤝 Closest game</span>
-        <span style="color:var(--text2);font-size:13px;text-align:right;">€${badges.closestGame.spread} spread<br><span style="font-size:11px;">${fmtDate(badges.closestGame.date)}${badges.closestGame.label ? ' · ' + badges.closestGame.label : ''}</span></span>
+      <div class="record-row">
+        <div class="record-label"><span class="record-icon">\u{1F91D}</span> Tightest table</div>
+        <div class="record-value"><b>\u20AC${badges.closestGame.spread}</b> spread<br><span class="record-date">${fmtDate(badges.closestGame.date)}${badges.closestGame.label ? ' &middot; ' + badges.closestGame.label : ''}</span></div>
       </div>
     </div>
     ` : ''}
@@ -401,17 +602,17 @@ function renderLeaderboard() {
       ${ranked.map((p, i) => {
         const streak = getStreak(p.name);
         return `
-        <div class="player-row" style="cursor:pointer;" onclick="openProfile('${p.name.replace(/'/g, "\\'")}')">
-          <div class="rank-badge">${i < 3 ? rankIcons[i] : `<span style="font-size:13px;color:var(--text2)">${i+1}</span>`}</div>
-          <div class="avatar" style="background:${avatarColor(p.name)}22;color:${avatarColor(p.name)}">${initials(p.name)}</div>
+        <div class="player-row clickable" onclick="openProfile('${p.name.replace(/'/g, "\\'")}')">
+          <div class="rank-badge ${i < 3 ? 'medal' : ''}">${i < 3 ? rankIcons[i] : (i + 1)}</div>
+          ${avatarHtml(p.name)}
           <div class="player-info">
             <div class="player-name">${p.name}</div>
-            <div class="player-meta">${p.games} games · ${p.winRate}% win rate${Math.abs(streak) >= 2 ? ' · ' + streakLabel(streak) : ''}</div>
+            <div class="player-meta">${p.games} games &middot; ${p.winRate}% win rate${Math.abs(streak) >= 2 ? ' &middot; ' + streakLabel(streak) : ''}</div>
           </div>
           <div>
             <div class="bar-wrap">
               <div class="pl ${plClass(p.totalPL)}">${fmtPL(p.totalPL)}</div>
-              <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(Math.abs(p.totalPL)/maxAbs*100)}%;background:${p.totalPL>0?'var(--green)':p.totalPL<0?'var(--red)':'var(--text2)'}"></div></div>
+              <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(Math.abs(p.totalPL)/maxAbs*100)}%;background:${p.totalPL>0?'#1e7a52':p.totalPL<0?'var(--burgundy)':'var(--ink-soft)'}"></div></div>
             </div>
           </div>
         </div>
@@ -422,18 +623,20 @@ function renderLeaderboard() {
 
 function renderStats() {
   const el = document.getElementById('stats');
+  if (!DATA.players.length) { el.innerHTML = '<div class="card"><div class="empty-note">No games logged yet.</div></div>'; return; }
+
   const ranked = DATA.players.map(p => ({ name: p, ...getStats(p) })).sort((a, b) => b.totalPL - a.totalPL);
 
   el.innerHTML = `
     <div class="section-title">Player breakdown</div>
-    <div class="card" style="padding: 4px 8px; overflow-x: auto;">
+    <div class="card" style="padding: 4px 10px; overflow-x: auto;">
       <table class="stats-table">
         <thead>
           <tr>
             <th>Player</th>
             <th>G</th>
             <th>W</th>
-            <th>W%</th>
+            <th>Win%</th>
             <th>Best</th>
             <th>Worst</th>
             <th>Total</th>
@@ -441,18 +644,18 @@ function renderStats() {
         </thead>
         <tbody>
           ${ranked.map(p => `
-            <tr style="cursor:pointer;" onclick="openProfile('${p.name.replace(/'/g, "\\'")}')">
+            <tr class="clickable" onclick="openProfile('${p.name.replace(/'/g, "\\'")}')">
               <td>
                 <div class="name-cell">
-                  <div class="sm-avatar" style="background:${avatarColor(p.name)}22;color:${avatarColor(p.name)}">${initials(p.name)}</div>
+                  ${avatarHtml(p.name, 'sm')}
                   ${p.name}
                 </div>
               </td>
               <td>${p.games}</td>
               <td>${p.wins}</td>
               <td>${p.winRate}%</td>
-              <td class="${p.biggestWin > 0 ? 'pl pos' : 'pl zero'}">${p.biggestWin > 0 ? '+€' + p.biggestWin : '—'}</td>
-              <td class="${p.biggestLoss < 0 ? 'pl neg' : 'pl zero'}">${p.biggestLoss < 0 ? '€' + p.biggestLoss : '—'}</td>
+              <td class="${p.biggestWin > 0 ? 'pl pos' : 'pl zero'}">${p.biggestWin > 0 ? '+\u20AC' + p.biggestWin : '&mdash;'}</td>
+              <td class="${p.biggestLoss < 0 ? 'pl neg' : 'pl zero'}">${p.biggestLoss < 0 ? '\u20AC' + p.biggestLoss : '&mdash;'}</td>
               <td class="pl ${plClass(p.totalPL)}">${fmtPL(p.totalPL)}</td>
             </tr>
           `).join('')}
@@ -460,14 +663,14 @@ function renderStats() {
       </table>
     </div>
 
-    <div class="section-title">Head-to-head: most played together</div>
+    <div class="section-title">Most played together</div>
     <div class="card">
-      ${getH2H().map(h => `
-        <div class="game-row">
-          <span style="color:var(--text)">${h.p1} <span style="color:var(--text2)">vs</span> ${h.p2}</span>
-          <span style="color:var(--text2);font-size:13px;">${h.count} game${h.count!==1?'s':''} together</span>
+      ${getH2H().length ? getH2H().map(h => `
+        <div class="h2h-row">
+          <span class="h2h-names">${h.p1}<span class="h2h-vs">vs</span>${h.p2}</span>
+          <span class="h2h-count">${h.count} game${h.count!==1?'s':''}</span>
         </div>
-      `).join('')}
+      `).join('') : '<div class="empty-note">Not enough games yet.</div>'}
     </div>
   `;
 }
@@ -499,8 +702,7 @@ function renderProfile(name) {
     return acc;
   }, []);
 
-  // simple sparkline svg
-  const w = 300, h = 70, pad = 6;
+  const w = 320, h = 80, pad = 8;
   const vals = cum.map(c => c.cum);
   const minV = Math.min(0, ...vals), maxV = Math.max(0, ...vals);
   const range = (maxV - minV) || 1;
@@ -509,32 +711,33 @@ function renderProfile(name) {
     const y = h - pad - ((c.cum - minV) / range) * (h - pad * 2);
     return `${x},${y}`;
   }).join(' ');
-  const lineColor = stats.totalPL >= 0 ? '#1db87a' : '#e24b4a';
+  const zeroY = h - pad - ((0 - minV) / range) * (h - pad * 2);
+  const lineColor = stats.totalPL >= 0 ? '#1e7a52' : '#8c2f39';
 
   el.innerHTML = `
-    <button class="back-btn" onclick="switchTab(activeTab)">← Back</button>
+    <button class="back-btn" onclick="switchTab(activeTab)">&larr; Back to ${activeTab}</button>
 
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
-      <div class="avatar" style="width:56px;height:56px;font-size:18px;background:${avatarColor(name)}22;color:${avatarColor(name)}">${initials(name)}</div>
+    <div class="profile-header">
+      <div class="profile-avatar" style="background:${avatarColor(name)}22;color:${avatarColor(name)}">${initials(name)}</div>
       <div>
-        <div style="font-size:20px;font-weight:600;">${name}</div>
-        <div class="player-meta">${stats.games} games played${Math.abs(streak) >= 1 ? ' · ' + streakLabel(streak) : ''}</div>
+        <div class="profile-name">${name}</div>
+        <div class="profile-meta">${stats.games} games played${Math.abs(streak) >= 1 ? ' &middot; ' + streakLabel(streak) : ''}</div>
       </div>
     </div>
 
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Total P/L</div><div class="metric-value ${plClass(stats.totalPL)}">${fmtPL(stats.totalPL)}</div></div>
+      <div class="metric"><div class="metric-label">Total P/L</div><div class="metric-value ${plClass(stats.totalPL)}" style="font-family:var(--font-mono);font-size:21px;">${fmtPL(stats.totalPL)}</div></div>
       <div class="metric"><div class="metric-label">Win rate</div><div class="metric-value">${stats.winRate}%</div></div>
-      <div class="metric"><div class="metric-label">Best night</div><div class="metric-value pos">${stats.biggestWin > 0 ? '+€'+stats.biggestWin : '—'}</div></div>
-      <div class="metric"><div class="metric-label">Worst night</div><div class="metric-value neg">${stats.biggestLoss < 0 ? '€'+stats.biggestLoss : '—'}</div></div>
+      <div class="metric"><div class="metric-label">Best night</div><div class="metric-value pos" style="font-family:var(--font-mono);font-size:21px;">${stats.biggestWin > 0 ? '+\u20AC'+stats.biggestWin : '&mdash;'}</div></div>
+      <div class="metric"><div class="metric-label">Worst night</div><div class="metric-value neg" style="font-family:var(--font-mono);font-size:21px;">${stats.biggestLoss < 0 ? '\u20AC'+stats.biggestLoss : '&mdash;'}</div></div>
     </div>
 
     ${cum.length > 1 ? `
     <div class="section-title">Profit over time</div>
-    <div class="card" style="padding:14px 16px;">
+    <div class="card chart-card">
       <svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none">
-        <line x1="${pad}" y1="${h - pad - ((0 - minV) / range) * (h - pad * 2)}" x2="${w-pad}" y2="${h - pad - ((0 - minV) / range) * (h - pad * 2)}" stroke="#2e2e2e" stroke-width="1" stroke-dasharray="3,3"/>
-        <polyline points="${points}" fill="none" stroke="${lineColor}" stroke-width="2"/>
+        <line x1="${pad}" y1="${zeroY}" x2="${w-pad}" y2="${zeroY}" stroke="rgba(32,24,15,0.18)" stroke-width="1" stroke-dasharray="3,3"/>
+        <polyline points="${points}" fill="none" stroke="${lineColor}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
       </svg>
     </div>
     ` : ''}
@@ -543,7 +746,7 @@ function renderProfile(name) {
     <div class="card">
       ${cum.slice().reverse().map(s => `
         <div class="game-row">
-          <span style="color:var(--text2)">${fmtDate(s.date)}${s.label ? ' · ' + s.label : ''}</span>
+          <span class="date-label">${fmtDate(s.date)}${s.label ? ' &middot; ' + s.label : ''}</span>
           <span class="pl ${plClass(s.pl)}">${fmtPL(s.pl)}</span>
         </div>
       `).join('')}
@@ -553,6 +756,8 @@ function renderProfile(name) {
 
 function renderHistory() {
   const el = document.getElementById('history');
+  if (!DATA.sessions.length) { el.innerHTML = '<div class="card"><div class="empty-note">No sessions logged yet.</div></div>'; return; }
+
   const sorted = [...DATA.sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
   el.innerHTML = `
     <div class="section-title">${DATA.sessions.length} games total</div>
@@ -560,8 +765,8 @@ function renderHistory() {
       const res = [...s.results].sort((a, b) => b.pl - a.pl);
       return `
         <div class="session-card">
-          <div class="session-date">${fmtDate(s.date)}${s.label ? ' · ' + s.label : ''}</div>
-          <div class="session-meta">${s.results.length} players</div>
+          <div class="session-date">${fmtDate(s.date)}${s.label ? ' &middot; ' + s.label : ''}</div>
+          <div class="session-meta">${s.results.length} players at the table</div>
           <div class="chips">
             ${res.map(r => `<span class="chip ${r.pl > 0 ? 'win' : r.pl < 0 ? 'loss' : 'zero'}">${r.name} ${fmtPL(r.pl)}</span>`).join('')}
           </div>
@@ -575,7 +780,7 @@ async function loadData() {
   try {
     const res = await fetch('data.json?v=' + Date.now());
     DATA = await res.json();
-    document.getElementById('top-subtitle').textContent = `${DATA.players.length} players · ${DATA.sessions.length} games`;
+    document.getElementById('top-subtitle').textContent = `${DATA.players.length} players \u00B7 ${DATA.sessions.length} games`;
     render(activeTab);
   } catch(e) {
     document.getElementById('top-subtitle').textContent = 'Error loading data';
