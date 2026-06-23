@@ -1,5 +1,5 @@
 {
-  "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia"],
+  "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia", "Abelishvili"],
   "sessions": [
     {
       "date": "2026-06-20",
@@ -10,6 +10,17 @@
         { "name": "Gogita", "pl": 0 },
         { "name": "Kaplanishvili", "pl": -20 },
         { "name": "Tsulaia", "pl": -100 }
+      ]
+    },
+    {
+      "date": "2026-06-23",
+      "label": "",
+      "results": [
+        { "name": "Kokaia", "pl": 230 },
+        { "name": "Gogita", "pl": 80 },
+        { "name": "Tsulaia", "pl": -60 },
+        { "name": "Tabatadze", "pl": -100 },
+        { "name": "Abelishvili", "pl": -150 }
       ]
     }
   ]
