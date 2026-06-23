@@ -551,7 +551,7 @@ function renderProfile(name) {
   `;
 }
 
-
+function renderHistory() {
   const el = document.getElementById('history');
   const sorted = [...DATA.sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
   el.innerHTML = `
