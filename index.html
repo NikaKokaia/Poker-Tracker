@@ -215,6 +215,14 @@
     flex-shrink: 0;
     position: relative;
     border: 1.5px solid currentColor;
+    overflow: hidden;
+  }
+  .avatar img, .sm-avatar img, .profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
   }
 
   .player-info { flex: 1; min-width: 0; }
@@ -307,6 +315,7 @@
     font-family: var(--font-display);
     font-size: 10px; font-weight: 600; flex-shrink: 0;
     border: 1.5px solid currentColor;
+    overflow: hidden;
   }
 
   .h2h-row {
@@ -384,6 +393,7 @@
     font-size: 20px; font-weight: 600;
     border: 2px solid currentColor;
     flex-shrink: 0;
+    overflow: hidden;
   }
   .profile-name {
     font-family: var(--font-display);
@@ -562,8 +572,13 @@ function render(tab) {
 }
 
 function avatarHtml(name, size) {
-  const cls = size === 'sm' ? 'sm-avatar' : 'avatar';
-  return `<div class="${cls}" style="background:${avatarColor(name)}22;color:${avatarColor(name)}">${initials(name)}</div>`;
+  const cls = size === 'sm' ? 'sm-avatar' : size === 'lg' ? 'profile-avatar' : 'avatar';
+  const photo = DATA.photos && DATA.photos[name];
+  const style = `background:${avatarColor(name)}22;color:${avatarColor(name)}`;
+  if (photo) {
+    return `<div class="${cls}" style="${style}"><img src="${photo}" alt="${name}" onerror="this.parentElement.innerHTML='${initials(name)}'"></div>`;
+  }
+  return `<div class="${cls}" style="${style}">${initials(name)}</div>`;
 }
 
 function renderLeaderboard() {
@@ -718,7 +733,7 @@ function renderProfile(name) {
     <button class="back-btn" onclick="switchTab(activeTab)">&larr; Back to ${activeTab}</button>
 
     <div class="profile-header">
-      <div class="profile-avatar" style="background:${avatarColor(name)}22;color:${avatarColor(name)}">${initials(name)}</div>
+      ${avatarHtml(name, 'lg')}
       <div>
         <div class="profile-name">${name}</div>
         <div class="profile-meta">${stats.games} games played${Math.abs(streak) >= 1 ? ' &middot; ' + streakLabel(streak) : ''}</div>
