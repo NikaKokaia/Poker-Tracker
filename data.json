@@ -1,5 +1,12 @@
 {
   "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia", "Abelishvili"],
+  "photos": {
+  "Abelishvili": "abelishvili.png",
+  "Kaplanishvili": "kaplanishvili.png",
+  "Kokaia": "kokaia.png",
+  "Tabatadze": "tabatadze.png",
+  "Tsulaia": "tsulaia.png"
+},
   "sessions": [
     {
       "date": "2026-06-20",
