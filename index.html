@@ -460,11 +460,13 @@
   <button class="tab active" onclick="switchTab('leaderboard')">Leaderboard</button>
   <button class="tab" onclick="switchTab('stats')">Stats</button>
   <button class="tab" onclick="switchTab('history')">History</button>
+  <button class="tab" onclick="switchTab('settle')">Settle up</button>
 </div>
 
 <div id="leaderboard" class="page active"><div class="loading">Shuffling the deck&hellip;</div></div>
 <div id="stats" class="page"><div class="loading">Shuffling the deck&hellip;</div></div>
 <div id="history" class="page"><div class="loading">Shuffling the deck&hellip;</div></div>
+<div id="settle" class="page"><div class="loading">Shuffling the deck&hellip;</div></div>
 <div id="profile" class="page"></div>
 
 <script>
@@ -524,10 +526,26 @@ function getStreak(name) {
   return sign * count;
 }
 
+function streakEmoji(streak) {
+  const n = Math.abs(streak);
+  if (streak > 0) {
+    if (n >= 5) return '\u{1F680}';
+    if (n >= 3) return '\u{1F525}';
+    return '\u2728';
+  }
+  if (streak < 0) {
+    if (n >= 5) return '\u2620\uFE0F';
+    if (n >= 3) return '\u{1F9CA}';
+    return '\u{1F4A7}';
+  }
+  return '';
+}
+
 function streakLabel(streak) {
   if (streak === 0) return 'No streak';
   const n = Math.abs(streak);
-  return streak > 0 ? `On a ${n}-win streak` : `On a ${n}-loss skid`;
+  const emoji = streakEmoji(streak);
+  return streak > 0 ? `${emoji} ${n}-win streak` : `${emoji} ${n}-loss skid`;
 }
 
 function getBadges() {
@@ -546,11 +564,33 @@ function getBadges() {
   return { biggestPot, closestGame };
 }
 
+// Minimal-transaction settle-up: greedily match biggest creditor with biggest debtor
+function getSettlements() {
+  const balances = DATA.players.map(p => ({ name: p, amt: getStats(p).totalPL })).filter(p => p.amt !== 0);
+  const creditors = balances.filter(p => p.amt > 0).map(p => ({ ...p })).sort((a, b) => b.amt - a.amt);
+  const debtors = balances.filter(p => p.amt < 0).map(p => ({ ...p, amt: -p.amt })).sort((a, b) => b.amt - a.amt);
+
+  const transactions = [];
+  let ci = 0, di = 0;
+  while (ci < creditors.length && di < debtors.length) {
+    const c = creditors[ci], d = debtors[di];
+    const amount = Math.min(c.amt, d.amt);
+    if (amount > 0.005) {
+      transactions.push({ from: d.name, to: c.name, amount: Math.round(amount * 100) / 100 });
+    }
+    c.amt -= amount;
+    d.amt -= amount;
+    if (c.amt <= 0.005) ci++;
+    if (d.amt <= 0.005) di++;
+  }
+  return transactions;
+}
+
 let activeTab = 'leaderboard';
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab')[['leaderboard','stats','history'].indexOf(tab)].classList.add('active');
+  document.querySelectorAll('.tab')[['leaderboard','stats','history','settle'].indexOf(tab)].classList.add('active');
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(tab).classList.add('active');
   window.scrollTo(0, 0);
@@ -568,6 +608,7 @@ function openProfile(name) {
 function render(tab) {
   if (tab === 'leaderboard') renderLeaderboard();
   else if (tab === 'stats') renderStats();
+  else if (tab === 'settle') renderSettle();
   else renderHistory();
 }
 
@@ -766,6 +807,49 @@ function renderProfile(name) {
         </div>
       `).join('')}
     </div>
+  `;
+}
+
+function renderSettle() {
+  const el = document.getElementById('settle');
+  const txns = getSettlements();
+  const balances = DATA.players.map(p => ({ name: p, amt: getStats(p).totalPL })).sort((a, b) => b.amt - a.amt);
+
+  if (!txns.length) {
+    el.innerHTML = `
+      <div class="section-title">Settle up</div>
+      <div class="card"><div class="empty-note">Everyone's all-time balance is even &mdash; nobody owes anybody.</div></div>
+    `;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="section-title">Who owes who</div>
+    <div class="card">
+      ${txns.map(t => `
+        <div class="player-row">
+          ${avatarHtml(t.from, 'sm')}
+          <div class="player-info">
+            <div class="player-name" style="font-size:14px;">${t.from} &rarr; ${t.to}</div>
+            <div class="player-meta">pays</div>
+          </div>
+          <div class="pl neg">\u20AC${t.amount}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="section-title">All-time balances</div>
+    <div class="card">
+      ${balances.map(b => `
+        <div class="player-row">
+          ${avatarHtml(b.name, 'sm')}
+          <div class="player-info"><div class="player-name" style="font-size:14px;">${b.name}</div></div>
+          <div class="pl ${plClass(b.amt)}">${fmtPL(b.amt)}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="empty-note" style="padding-top:0;">Settles all-time balances with the fewest payments possible. Once everyone pays up, balances reset to zero &mdash; if you want a fresh slate, just wipe history.</div>
   `;
 }
 
