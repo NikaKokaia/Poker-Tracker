@@ -1,12 +1,13 @@
 {
   "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia", "Abelishvili"],
   "photos": {
-  "Abelishvili": "abelishvili.png",
-  "Kaplanishvili": "kaplanishvili.png",
-  "Kokaia": "kokaia.png",
-  "Tabatadze": "tabatadze.png",
-  "Tsulaia": "tsulaia.png"
-},
+    "Abelishvili": "abelishvili.png",
+    "Kaplanishvili": "kaplanishvili.png",
+    "Kokaia": "kokaia.png",
+    "Tabatadze": "tabatadze.png",
+    "Tsulaia": "tsulaia.png",
+    "Gogita": "gogita.png"
+  },
   "sessions": [
     {
       "date": "2026-06-20",
@@ -28,6 +29,16 @@
         { "name": "Tsulaia", "pl": -60 },
         { "name": "Tabatadze", "pl": -100 },
         { "name": "Abelishvili", "pl": -150 }
+      ]
+    },
+    {
+      "date": "2026-06-25",
+      "label": "",
+      "results": [
+        { "name": "Kokaia", "pl": 170 },
+        { "name": "Tabatadze", "pl": -70 },
+        { "name": "Tsulaia", "pl": -60 },
+        { "name": "Gogita", "pl": -40 }
       ]
     }
   ]
