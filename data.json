@@ -1,5 +1,5 @@
 {
-  "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia", "Abelishvili"],
+  "players": ["Kokaia", "Tabatadze", "Gogita", "Kaplanishvili", "Tsulaia", "Abelishvili", "Iraklli", "Getiashvili"],
   "photos": {
     "Abelishvili": "abelishvili.png",
     "Kaplanishvili": "kaplanishvili.png",
@@ -39,6 +39,19 @@
         { "name": "Tabatadze", "pl": -70 },
         { "name": "Tsulaia", "pl": -60 },
         { "name": "Gogita", "pl": -40 }
+      ]
+    },
+    {
+      "date": "2026-06-27",
+      "label": "",
+      "results": [
+        { "name": "Abelishvili", "pl": 490 },
+        { "name": "Kokaia", "pl": -100 },
+        { "name": "Tabatadze", "pl": -200 },
+        { "name": "Iraklli", "pl": -110 },
+        { "name": "Getiashvili", "pl": -40 },
+        { "name": "Tsulaia", "pl": -20 },
+        { "name": "Gogita", "pl": -20 }
       ]
     }
   ]
