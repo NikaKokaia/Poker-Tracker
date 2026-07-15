@@ -23,7 +23,6 @@
     --burgundy-bright: #b8434f;
     --line: rgba(243, 234, 212, 0.12);
     --line-soft: rgba(32, 24, 15, 0.1);
-
     --font-display: 'Fraunces', serif;
     --font-body: 'Outfit', sans-serif;
     --font-mono: 'DM Mono', monospace;
@@ -32,9 +31,7 @@
   html { -webkit-text-size-adjust: 100%; }
 
   body {
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(200,152,63,0.10), transparent 60%),
-      var(--felt);
+    background: radial-gradient(ellipse 900px 500px at 50% -10%, rgba(200,152,63,0.10), transparent 60%), var(--felt);
     background-attachment: fixed;
     color: var(--cream);
     font-family: var(--font-body);
@@ -60,206 +57,63 @@
     border-bottom: 1px solid var(--line);
     padding: 18px 20px 16px;
   }
-
-  .brand-row {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-  }
-
-  .suit-mark {
-    font-size: 20px;
-    color: var(--gold-bright);
-    line-height: 1;
-    transform: translateY(2px);
-  }
-
-  .top-bar h1 {
-    font-family: var(--font-display);
-    font-size: 23px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    color: var(--cream);
-  }
-
-  .subtitle {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--cream-dim);
-    opacity: 0.65;
-    margin-top: 4px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
+  .brand-row { display: flex; align-items: baseline; gap: 10px; }
+  .suit-mark { font-size: 20px; color: var(--gold-bright); line-height: 1; transform: translateY(2px); }
+  .top-bar h1 { font-family: var(--font-display); font-size: 23px; font-weight: 600; letter-spacing: 0.01em; color: var(--cream); }
+  .subtitle { font-family: var(--font-mono); font-size: 11px; color: var(--cream-dim); opacity: 0.65; margin-top: 4px; letter-spacing: 0.03em; text-transform: uppercase; }
 
   .tab-bar {
-    display: flex;
-    gap: 4px;
-    background: var(--felt-dark);
-    border-bottom: 1px solid var(--line);
-    padding: 0 16px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    position: sticky;
-    top: 73px;
-    z-index: 19;
+    display: flex; gap: 4px; background: var(--felt-dark); border-bottom: 1px solid var(--line);
+    padding: 0 16px; overflow-x: auto; scrollbar-width: none; position: sticky; top: 73px; z-index: 19;
   }
   .tab-bar::-webkit-scrollbar { display: none; }
-
   .tab {
-    position: relative;
-    padding: 13px 14px 11px;
-    font-family: var(--font-body);
-    font-size: 13.5px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: rgba(243,234,212,0.5);
-    border: none;
-    background: none;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: color 0.15s;
+    position: relative; padding: 13px 14px 11px; font-family: var(--font-body); font-size: 13.5px;
+    font-weight: 500; letter-spacing: 0.02em; color: rgba(243,234,212,0.5); border: none;
+    background: none; cursor: pointer; white-space: nowrap; transition: color 0.15s;
   }
   .tab.active { color: var(--gold-bright); }
   .tab.active::after {
-    content: '';
-    position: absolute;
-    left: 14px; right: 14px; bottom: 0;
-    height: 2px;
-    background: var(--gold-bright);
-    border-radius: 2px 2px 0 0;
+    content: ''; position: absolute; left: 14px; right: 14px; bottom: 0;
+    height: 2px; background: var(--gold-bright); border-radius: 2px 2px 0 0;
   }
   .tab:hover:not(.active) { color: rgba(243,234,212,0.8); }
 
   .page { display: none; padding: 22px 16px 50px; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
   .page.active { display: block; }
 
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-    margin-bottom: 26px;
-  }
-
-  .metric {
-    background: linear-gradient(160deg, rgba(243,234,212,0.07), rgba(243,234,212,0.02));
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 14px 16px;
-  }
-  .metric-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--cream-dim);
-    opacity: 0.6;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 7px;
-  }
-  .metric-value {
-    font-family: var(--font-display);
-    font-size: 25px;
-    font-weight: 600;
-    color: var(--cream);
-  }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 26px; }
+  .metric { background: linear-gradient(160deg, rgba(243,234,212,0.07), rgba(243,234,212,0.02)); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .metric-label { font-family: var(--font-mono); font-size: 10px; color: var(--cream-dim); opacity: 0.6; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 7px; }
+  .metric-value { font-family: var(--font-display); font-size: 25px; font-weight: 600; color: var(--cream); }
 
   .section-title {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--gold-bright);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 11px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--gold-bright);
+    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 11px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--line), transparent);
-  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
 
-  .card {
-    background: var(--cream);
-    color: var(--ink);
-    border-radius: 16px;
-    padding: 4px 18px;
-    margin-bottom: 22px;
-    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4);
-  }
+  .card { background: var(--cream); color: var(--ink); border-radius: 16px; padding: 4px 18px; margin-bottom: 22px; box-shadow: 0 8px 24px -8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4); }
 
-  .player-row {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--line-soft);
-  }
+  .player-row { display: flex; align-items: center; gap: 13px; padding: 14px 0; border-bottom: 1px solid var(--line-soft); }
   .player-row:last-child { border-bottom: none; }
   .player-row.clickable { cursor: pointer; transition: background 0.12s; margin: 0 -18px; padding: 14px 18px; }
   .player-row.clickable:hover { background: rgba(32,24,15,0.04); }
 
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 600;
-    flex-shrink: 0;
-    position: relative;
-    border: 1.5px solid currentColor;
-    overflow: hidden;
-  }
-  .avatar img, .sm-avatar img, .profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
-  }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 14px; font-weight: 600; flex-shrink: 0; border: 1.5px solid currentColor; overflow: hidden; }
+  .avatar img, .sm-avatar img, .profile-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
 
   .player-info { flex: 1; min-width: 0; }
-  .player-name {
-    font-family: var(--font-body);
-    font-size: 15.5px;
-    font-weight: 600;
-    color: var(--ink);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .player-meta {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--ink-soft);
-    margin-top: 3px;
-    letter-spacing: 0.01em;
-  }
+  .player-name { font-family: var(--font-body); font-size: 15.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; letter-spacing: 0.01em; }
 
-  .pl {
-    font-family: var(--font-mono);
-    font-size: 16px;
-    font-weight: 500;
-    text-align: right;
-    white-space: nowrap;
-  }
+  .pl { font-family: var(--font-mono); font-size: 16px; font-weight: 500; text-align: right; white-space: nowrap; }
   .pl.pos { color: #1e7a52; }
   .pl.neg { color: var(--burgundy); }
   .pl.zero { color: var(--ink-soft); }
 
-  .rank-badge {
-    width: 26px;
-    text-align: center;
-    flex-shrink: 0;
-    font-family: var(--font-mono);
-    color: var(--ink-soft);
-    font-size: 13px;
-  }
+  .rank-badge { width: 26px; text-align: center; flex-shrink: 0; font-family: var(--font-mono); color: var(--ink-soft); font-size: 13px; }
   .rank-badge.medal { font-size: 19px; }
 
   .bar-wrap { display: flex; align-items: center; gap: 9px; }
@@ -267,14 +121,7 @@
   .bar-fill { height: 100%; border-radius: 3px; }
 
   .record-card { background: var(--cream); }
-  .record-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 0;
-    border-bottom: 1px solid var(--line-soft);
-    gap: 12px;
-  }
+  .record-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--line-soft); gap: 12px; }
   .record-row:last-child { border-bottom: none; }
   .record-label { display: flex; align-items: center; gap: 9px; font-weight: 500; font-size: 14px; color: var(--ink); }
   .record-icon { font-size: 17px; }
@@ -283,161 +130,47 @@
   .record-date { font-family: var(--font-mono); font-size: 10.5px; opacity: 0.7; }
 
   .stats-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .stats-table th {
-    text-align: right;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--ink-soft);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 10px 7px 12px;
-    border-bottom: 1.5px solid var(--ink);
-  }
+  .stats-table th { text-align: right; font-family: var(--font-mono); font-size: 10px; font-weight: 500; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 7px 12px; border-bottom: 1.5px solid var(--ink); }
   .stats-table th:first-child { text-align: left; }
-  .stats-table td {
-    padding: 12px 7px;
-    text-align: right;
-    border-bottom: 1px solid var(--line-soft);
-    vertical-align: middle;
-    font-family: var(--font-mono);
-    color: var(--ink);
-    font-size: 13px;
-  }
+  .stats-table td { padding: 12px 7px; text-align: right; border-bottom: 1px solid var(--line-soft); vertical-align: middle; font-family: var(--font-mono); color: var(--ink); font-size: 13px; }
   .stats-table td:first-child { text-align: left; font-family: var(--font-body); }
   .stats-table tr:last-child td { border-bottom: none; }
   .stats-table tr.clickable { cursor: pointer; transition: background 0.12s; }
   .stats-table tr.clickable:hover { background: rgba(32,24,15,0.04); }
   .stats-table .name-cell { display: flex; align-items: center; gap: 9px; font-weight: 600; }
-  .sm-avatar {
-    width: 27px; height: 27px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 10px; font-weight: 600; flex-shrink: 0;
-    border: 1.5px solid currentColor;
-    overflow: hidden;
-  }
+  .sm-avatar { width: 27px; height: 27px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 10px; font-weight: 600; flex-shrink: 0; border: 1.5px solid currentColor; overflow: hidden; }
 
-  .h2h-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line-soft);
-    font-size: 13.5px;
-  }
+  .h2h-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
   .h2h-row:last-child { border-bottom: none; }
   .h2h-names { color: var(--ink); font-weight: 500; }
   .h2h-vs { color: var(--ink-soft); font-style: italic; font-family: var(--font-display); margin: 0 3px; }
   .h2h-count { font-family: var(--font-mono); color: var(--ink-soft); font-size: 12px; }
 
-  .session-card {
-    background: var(--cream);
-    color: var(--ink);
-    border-radius: 14px;
-    padding: 15px 18px;
-    margin-bottom: 11px;
-    box-shadow: 0 6px 18px -8px rgba(0,0,0,0.3);
-  }
-  .session-date {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 3px;
-  }
-  .session-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--ink-soft);
-    margin-bottom: 11px;
-  }
+  .session-card { background: var(--cream); color: var(--ink); border-radius: 14px; padding: 15px 18px; margin-bottom: 11px; box-shadow: 0 6px 18px -8px rgba(0,0,0,0.3); }
+  .session-date { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+  .session-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); margin-bottom: 11px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
+  .chip { font-family: var(--font-mono); font-size: 12px; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
   .chip.win { background: #dcf0e4; color: #1e7a52; }
   .chip.loss { background: #f5dfe1; color: var(--burgundy); }
   .chip.zero { background: rgba(32,24,15,0.07); color: var(--ink-soft); }
 
-  .back-btn {
-    background: none;
-    border: none;
-    color: var(--gold-bright);
-    font-family: var(--font-body);
-    font-size: 13.5px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0;
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .back-btn { background: none; border: none; color: var(--gold-bright); font-family: var(--font-body); font-size: 13.5px; font-weight: 500; cursor: pointer; padding: 0; margin-bottom: 22px; display: flex; align-items: center; gap: 6px; }
   .back-btn:hover { color: var(--cream); }
 
-  .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .profile-avatar {
-    width: 60px; height: 60px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display);
-    font-size: 20px; font-weight: 600;
-    border: 2px solid currentColor;
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-  .profile-name {
-    font-family: var(--font-display);
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--cream);
-  }
-  .profile-meta {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--cream-dim);
-    opacity: 0.7;
-    margin-top: 4px;
-  }
+  .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .profile-avatar { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 20px; font-weight: 600; border: 2px solid currentColor; flex-shrink: 0; overflow: hidden; }
+  .profile-name { font-family: var(--font-display); font-size: 24px; font-weight: 600; color: var(--cream); }
+  .profile-meta { font-family: var(--font-mono); font-size: 12px; color: var(--cream-dim); opacity: 0.7; margin-top: 4px; }
 
-  .game-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--line-soft);
-    font-size: 13.5px;
-  }
+  .game-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
   .game-row:last-child { border-bottom: none; }
   .game-row .date-label { color: var(--ink-soft); font-family: var(--font-mono); font-size: 12px; }
-
   .chart-card { padding: 18px 18px 14px; }
 
-  .loading {
-    text-align: center;
-    padding: 70px 20px;
-    color: var(--cream-dim);
-    opacity: 0.6;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    letter-spacing: 0.03em;
-  }
-
-  .empty-note {
-    text-align: center;
-    padding: 30px 16px;
-    color: var(--ink-soft);
-    font-size: 13.5px;
-  }
+  .loading { text-align: center; padding: 70px 20px; color: var(--cream-dim); opacity: 0.6; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.03em; }
+  .empty-note { text-align: center; padding: 30px 16px; color: var(--ink-soft); font-size: 13.5px; }
+  .settle-note { font-family: var(--font-mono); font-size: 11px; color: var(--ink-soft); text-align: center; padding: 10px 16px 20px; line-height: 1.6; }
 
   @media (max-width: 420px) {
     .metrics { grid-template-columns: repeat(2, 1fr); }
@@ -505,6 +238,17 @@ function getStats(name) {
   return { totalPL, wins, losses: games - wins, games, winRate: games ? Math.round((wins / games) * 100) : 0, biggestWin, biggestLoss };
 }
 
+function getSettleStats(name) {
+  const cutoff = DATA.settleDate || null;
+  let totalPL = 0;
+  DATA.sessions.forEach(s => {
+    if (cutoff && s.date < cutoff) return;
+    const r = s.results.find(r => r.name === name);
+    if (r) totalPL += r.pl;
+  });
+  return totalPL;
+}
+
 function getPlayerSessions(name) {
   return DATA.sessions
     .filter(s => s.results.some(r => r.name === name))
@@ -564,12 +308,10 @@ function getBadges() {
   return { biggestPot, closestGame };
 }
 
-// Minimal-transaction settle-up: greedily match biggest creditor with biggest debtor
 function getSettlements() {
-  const balances = DATA.players.map(p => ({ name: p, amt: getStats(p).totalPL })).filter(p => p.amt !== 0);
+  const balances = DATA.players.map(p => ({ name: p, amt: getSettleStats(p) })).filter(p => p.amt !== 0);
   const creditors = balances.filter(p => p.amt > 0).map(p => ({ ...p })).sort((a, b) => b.amt - a.amt);
   const debtors = balances.filter(p => p.amt < 0).map(p => ({ ...p, amt: -p.amt })).sort((a, b) => b.amt - a.amt);
-
   const transactions = [];
   let ci = 0, di = 0;
   while (ci < creditors.length && di < debtors.length) {
@@ -680,33 +422,20 @@ function renderLeaderboard() {
 function renderStats() {
   const el = document.getElementById('stats');
   if (!DATA.players.length) { el.innerHTML = '<div class="card"><div class="empty-note">No games logged yet.</div></div>'; return; }
-
   const ranked = DATA.players.map(p => ({ name: p, ...getStats(p) })).sort((a, b) => b.totalPL - a.totalPL);
-
   el.innerHTML = `
     <div class="section-title">Player breakdown</div>
     <div class="card" style="padding: 4px 10px; overflow-x: auto;">
       <table class="stats-table">
         <thead>
           <tr>
-            <th>Player</th>
-            <th>G</th>
-            <th>W</th>
-            <th>Win%</th>
-            <th>Best</th>
-            <th>Worst</th>
-            <th>Total</th>
+            <th>Player</th><th>G</th><th>W</th><th>Win%</th><th>Best</th><th>Worst</th><th>Total</th>
           </tr>
         </thead>
         <tbody>
           ${ranked.map(p => `
             <tr class="clickable" onclick="openProfile('${p.name.replace(/'/g, "\\'")}')">
-              <td>
-                <div class="name-cell">
-                  ${avatarHtml(p.name, 'sm')}
-                  ${p.name}
-                </div>
-              </td>
+              <td><div class="name-cell">${avatarHtml(p.name, 'sm')}${p.name}</div></td>
               <td>${p.games}</td>
               <td>${p.wins}</td>
               <td>${p.winRate}%</td>
@@ -718,7 +447,6 @@ function renderStats() {
         </tbody>
       </table>
     </div>
-
     <div class="section-title">Most played together</div>
     <div class="card">
       ${getH2H().length ? getH2H().map(h => `
@@ -744,8 +472,7 @@ function getH2H() {
   });
   return Object.entries(counts)
     .map(([k, count]) => { const [p1, p2] = k.split('|'); return { p1, p2, count }; })
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 6);
+    .sort((a, b) => b.count - a.count).slice(0, 6);
 }
 
 function renderProfile(name) {
@@ -772,7 +499,6 @@ function renderProfile(name) {
 
   el.innerHTML = `
     <button class="back-btn" onclick="switchTab(activeTab)">&larr; Back to ${activeTab}</button>
-
     <div class="profile-header">
       ${avatarHtml(name, 'lg')}
       <div>
@@ -780,14 +506,12 @@ function renderProfile(name) {
         <div class="profile-meta">${stats.games} games played${Math.abs(streak) >= 1 ? ' &middot; ' + streakLabel(streak) : ''}</div>
       </div>
     </div>
-
     <div class="metrics">
       <div class="metric"><div class="metric-label">Total P/L</div><div class="metric-value ${plClass(stats.totalPL)}" style="font-family:var(--font-mono);font-size:21px;">${fmtPL(stats.totalPL)}</div></div>
       <div class="metric"><div class="metric-label">Win rate</div><div class="metric-value">${stats.winRate}%</div></div>
       <div class="metric"><div class="metric-label">Best night</div><div class="metric-value pos" style="font-family:var(--font-mono);font-size:21px;">${stats.biggestWin > 0 ? '+\u20AC'+stats.biggestWin : '&mdash;'}</div></div>
       <div class="metric"><div class="metric-label">Worst night</div><div class="metric-value neg" style="font-family:var(--font-mono);font-size:21px;">${stats.biggestLoss < 0 ? '\u20AC'+stats.biggestLoss : '&mdash;'}</div></div>
     </div>
-
     ${cum.length > 1 ? `
     <div class="section-title">Profit over time</div>
     <div class="card chart-card">
@@ -797,7 +521,6 @@ function renderProfile(name) {
       </svg>
     </div>
     ` : ''}
-
     <div class="section-title">Game history</div>
     <div class="card">
       ${cum.slice().reverse().map(s => `
@@ -813,18 +536,20 @@ function renderProfile(name) {
 function renderSettle() {
   const el = document.getElementById('settle');
   const txns = getSettlements();
-  const balances = DATA.players.map(p => ({ name: p, amt: getStats(p).totalPL })).sort((a, b) => b.amt - a.amt);
+  const cutoff = DATA.settleDate;
+  const settleBalances = DATA.players.map(p => ({ name: p, amt: getSettleStats(p) })).sort((a, b) => b.amt - a.amt);
 
   if (!txns.length) {
     el.innerHTML = `
       <div class="section-title">Settle up</div>
-      <div class="card"><div class="empty-note">Everyone's all-time balance is even &mdash; nobody owes anybody.</div></div>
+      <div class="card"><div class="empty-note">All square &mdash; nobody owes anybody.</div></div>
     `;
     return;
   }
 
   el.innerHTML = `
     <div class="section-title">Who owes who</div>
+    ${cutoff ? `<div class="settle-note">Based on games from ${fmtDate(cutoff)} onwards &mdash; previous debts already settled.</div>` : ''}
     <div class="card">
       ${txns.map(t => `
         <div class="player-row">
@@ -837,10 +562,9 @@ function renderSettle() {
         </div>
       `).join('')}
     </div>
-
-    <div class="section-title">All-time balances</div>
+    <div class="section-title">Current balances</div>
     <div class="card">
-      ${balances.map(b => `
+      ${settleBalances.map(b => `
         <div class="player-row">
           ${avatarHtml(b.name, 'sm')}
           <div class="player-info"><div class="player-name" style="font-size:14px;">${b.name}</div></div>
@@ -848,15 +572,12 @@ function renderSettle() {
         </div>
       `).join('')}
     </div>
-
-    <div class="empty-note" style="padding-top:0;">Settles all-time balances with the fewest payments possible. Once everyone pays up, balances reset to zero &mdash; if you want a fresh slate, just wipe history.</div>
   `;
 }
 
 function renderHistory() {
   const el = document.getElementById('history');
   if (!DATA.sessions.length) { el.innerHTML = '<div class="card"><div class="empty-note">No sessions logged yet.</div></div>'; return; }
-
   const sorted = [...DATA.sessions].sort((a, b) => new Date(b.date) - new Date(a.date));
   el.innerHTML = `
     <div class="section-title">${DATA.sessions.length} games total</div>
