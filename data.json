@@ -11,6 +11,7 @@
     "Getiashvili": "getiashvili.png",
     "Elene": "elene.png"
   },
+  "settleDate": "2026-07-15",
   "sessions": [
     {
       "date": "2026-06-20",
@@ -77,6 +78,17 @@
         { "name": "Kaplanishvili", "pl": -440 },
         { "name": "Elene", "pl": -40 },
         { "name": "Irakli", "pl": -60 }
+      ]
+    },
+    {
+      "date": "2026-07-15",
+      "label": "",
+      "results": [
+        { "name": "Kokaia", "pl": 215 },
+        { "name": "Gogita", "pl": -15 },
+        { "name": "Tsulaia", "pl": -50 },
+        { "name": "Kaplanishvili", "pl": -100 },
+        { "name": "Irakli", "pl": -50 }
       ]
     }
   ]
