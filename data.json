@@ -90,6 +90,16 @@
         { "name": "Kaplanishvili", "pl": -100 },
         { "name": "Irakli", "pl": -50 }
       ]
+    },
+    {
+      "date": "2026-07-18",
+      "label": "",
+      "results": [
+        { "name": "Kokaia", "pl": 355 },
+        { "name": "Kaplanishvili", "pl": -150 },
+        { "name": "Tsulaia", "pl": -150 },
+        { "name": "Gogita", "pl": -55 }
+      ]
     }
   ]
 }
